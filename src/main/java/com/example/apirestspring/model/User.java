@@ -1,9 +1,15 @@
 package com.example.apirestspring.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
+@Table(name = "tb_user")
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -14,6 +20,10 @@ public class User implements Serializable{
 	private String email;
 	private String contato;
 	private String password;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "client")
+	private List<Order> orders = new ArrayList<>();
 	
 	public User() {}
 
@@ -66,6 +76,10 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -90,5 +104,5 @@ public class User implements Serializable{
 			return false;
 		return true;
 	}
-	
+
 }
