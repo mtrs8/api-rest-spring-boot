@@ -5,6 +5,7 @@ import java.time.Instant;
 
 import javax.persistence.*;
 
+import com.example.apirestspring.model.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -18,17 +19,20 @@ public class Order implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant timestamp;
 	
+	private Integer orderStatus;
+	
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client;
 	
 	public Order() {}
 
-	public Order(Integer id, Instant timestamp, User client) {
+	public Order(Integer id, Instant timestamp, User client, OrderStatus status) {
 		super();
 		this.id = id;
 		this.timestamp = timestamp;
 		this.client = client;
+		this.setStatus(status);
 	}
 
 	public Integer getId() {
@@ -49,6 +53,15 @@ public class Order implements Serializable {
 
 	public User getClient() {
 		return client;
+	}
+	
+	public OrderStatus getStatus() {
+		return OrderStatus.valueOf(orderStatus);
+	}
+	
+	public void setStatus(OrderStatus status) {
+		if(status != null)
+			this.orderStatus = status.getCode();
 	}
 
 	public void setClient(User client) {
